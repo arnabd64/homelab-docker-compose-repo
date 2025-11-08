@@ -1,0 +1,8 @@
+{
+    acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+    email {env.CLOUDFLARE_EMAIL}
+}
+
+127.0.0.1 {
+    respond /health 204
+}

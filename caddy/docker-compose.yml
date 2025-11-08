@@ -1,0 +1,42 @@
+networks:
+  proxy:
+    external: true
+    driver: bridge
+
+volumes:
+  data:
+  config:
+
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - proxy
+    dns:
+      - 1.1.1.1
+    ports:
+      - 80:80/tcp
+      - 443:443/tcp
+      - 443:443/udp
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - data:/data
+      - config:/config
+    environment:
+      - TZ=Asia/Kolkata
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/health"]
+      interval: 180s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 256M
+
