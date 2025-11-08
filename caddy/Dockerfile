@@ -9,5 +9,3 @@ RUN xcaddy build \
 FROM caddy:2-alpine
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
-
-EXPOSE 2019 80 443
