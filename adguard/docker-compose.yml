@@ -1,0 +1,35 @@
+networks:
+  proxy:
+    driver: bridge
+    external: true
+
+volumes:
+  workdir:
+  config:
+
+services:
+  adguard:
+    image: adguard/adguardhome:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+    expose:
+      - 3000/tcp
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - workdir:/opt/adguardhome/work
+      - config:/opt/adguardhome/conf
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000/"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M

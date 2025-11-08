@@ -6,3 +6,7 @@
 127.0.0.1 {
     respond /health 204
 }
+
+adguard.arnab-homelab.cc {
+    reverse_proxy adguard:3000
+}
