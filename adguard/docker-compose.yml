@@ -1,15 +1,11 @@
-volumes:
-  workdir:
-  config:
-
 services:
   adguard:
     image: adguard/adguardhome:latest
     restart: unless-stopped
     network_mode: host
     volumes:
-      - workdir:/opt/adguardhome/work
-      - config:/opt/adguardhome/conf
+      - ${DOCKER_VOLUMES}/adguard/workdir:/opt/adguardhome/work
+      - ${DOCKER_VOLUMES}/adguard/config:/opt/adguardhome/conf
     environment:
       - TZ=Asia/Kolkata
     healthcheck:
